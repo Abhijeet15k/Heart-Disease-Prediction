@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #3498db;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+        }
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .positive {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .negative {
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .form-section {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Heart Disease Prediction</h1>
+        <form id="predictionForm">
+            <div class="form-section">
+                <h2>Numerical Features</h2>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="resting_blood_pressure">Resting Blood Pressure (mm Hg):</label>
+                    <input type="number" id="resting_blood_pressure" name="resting_blood_pressure" required>
+                </div>
+                <div class="form-group">
+                    <label for="serum_cholestoral">Serum Cholesterol (mg/dl):</label>
+                    <input type="number" id="serum_cholestoral" name="serum_cholestoral" required>
+                </div>
+                <div class="form-group">
+                    <label for="max_heart_rate">Maximum Heart Rate Achieved:</label>
+                    <input type="number" id="max_heart_rate" name="max_heart_rate" required>
+                </div>
+                <div class="form-group">
+                    <label for="oldpeak">ST Depression (oldpeak):</label>
+                    <input type="number" step="0.1" id="oldpeak" name="oldpeak" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Categorical Features</h2>
+                <div class="form-group">
+                    <label for="chest_pain_type">Chest Pain Type:</label>
+                    <select id="chest_pain_type" name="chest_pain_type" required>
+                        <option value="typical">Typical Angina</option>
+                        <option value="atypical">Atypical Angina</option>
+                        <option value="non-anginal">Non-Anginal Pain</option>
+                        <option value="asymptomatic">Asymptomatic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="resting_electrocardiographic_results">Resting ECG Results:</label>
+                    <select id="resting_electrocardiographic_results" name="resting_electrocardiographic_results" required>
+                        <option value="normal">Normal</option>
+                        <option value="ST-T">ST-T Wave Abnormality</option>
+                        <option value="hypertrophy">Left Ventricular Hypertrophy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ST_segment">ST Segment Slope:</label>
+                    <select id="ST_segment" name="ST_segment" required>
+                        <option value="upsloping">Upsloping</option>
+                        <option value="flat">Flat</option>
+                        <option value="downsloping">Downsloping</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="major_vessels">Number of Major Vessels:</label>
+                    <select id="major_vessels" name="major_vessels" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="thal">Thalassemia:</label>
+                    <select id="thal" name="thal" required>
+                        <option value="normal">Normal</option>
+                        <option value="fixed">Fixed Defect</option>
+                        <option value="reversible">Reversible Defect</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Predict</button>
+        </form>
+
+        <div id="result" class="result-container">
+            <h2>Prediction Result</h2>
+            <div id="predictionOutput"></div>
+            <div id="probabilityOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('/predict', {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('predictionOutput').innerHTML = 
+                        `<p class="error">Error: ${data.error}</p>`;
+                    return;
+                }
+
+                const resultElement = document.getElementById('predictionOutput');
+                const probElement = document.getElementById('probabilityOutput');
+                
+                resultElement.innerHTML = 
+                    `<p class="${data.prediction === 1 ? 'positive' : 'negative'}">
+                        ${data.message}
+                    </p>`;
+                
+                probElement.innerHTML = 
+                    `<p>Probability: ${(data.probability * 100).toFixed(2)}%</p>`;
+            })
+            .catch(error => {
+                document.getElementById('predictionOutput').innerHTML = 
+                    `<p class="error">Error: ${error.message}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
